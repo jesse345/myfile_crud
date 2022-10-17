@@ -1,8 +1,0 @@
-django==3.2.15
-djangorestframework
-mysqlclient
-requests
-flake8
-autopep8
-pillow
-django-cors-headers
