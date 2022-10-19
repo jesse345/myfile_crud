@@ -69,17 +69,17 @@ $(document).ready(function(){
                                         <td>${ $row.age}</td>
                                         <td>${ $row.birthday}</td>
                                         <td>
-                                            <button class="btn-edit"
+                                            <button class="btn-edit btn btn-success"
                                                 data-row-id="${ $row.profile_id }"
                                                 data-firstname="${ $row.firstname }"
                                                 data-lastname="${ $row.lastname }"
                                                 data-address="${ $row.address }"
                                                 data-age="${ $row.age }"
-                                                data-birthday"${ $row.birthday }"
-                                            >Edit</button>
-                                            <button
+                                                data-birthday="${ $row.birthday }"
+                                            >Edit <i class="fa fa-pencil"></i></button>
+                                            <button class="btn-delete btn btn-danger"
                                                 data-row-id="${ $row.profile_id }"
-                                            >Delete</button>
+                                            >Delete <i class="fa fa-close"></i></button>
                                             
                                         </td>
                                     </tr>
@@ -98,27 +98,50 @@ $(document).ready(function(){
                             if( $self.btn_submit.attr('data-action') == 'update' ){
                                 let $td = $self.tbl_display.find('tr#'+ $row.profile_id).find('td');
 
-                                $td.eq(0).html( $row.profile_name );
-                                
+                                $td.eq(0).html( $row.profile_id );
+                                $td.eq(1).html( $row.firstname  +" "+ $row.lastname );
+                                $td.eq(2).html( $row.address );
+                                $td.eq(3).html( $row.age );
+                                $td.eq(4).html( $row.birthday);
 
+                                $self.firstname.val('');
+                                $self.lastname.val('');
+                                $self.address.val('');
+                                $self.age.val('');
+                                $self.birthday.val('');
+
+                                $self.btn_submit.attr('data-action', 'new');
                             }
                     break;
                 }
         },        
         Update: (e) => {
+            
             let $self = Profile.config;
             let $row_id = e.currentTarget.getAttribute('data-row-id');
-            let $name = e.currentTarget.getAttribute('data-name');
+            let $firstname = e.currentTarget.getAttribute('data-firstname');
+            let $lastname = e.currentTarget.getAttribute('data-lastname');
+            let $address = e.currentTarget.getAttribute('data-address');
+            let $age = e.currentTarget.getAttribute('data-age');
+            let $birthday = e.currentTarget.getAttribute('data-birthday');
+          
+            
 
-            $self.in_name.val($name);
+            $self.firstname.val($firstname);
+            $self.lastname.val($lastname);
+            $self.address.val($address);
+            $self.age.val($age);
+            $self.birthday.val($birthday);
+
             $self.btn_submit.attr('data-row-id', $row_id);
             $self.btn_submit.attr('data-action', 'update');
+            
             
         },
         Delete: (e) => {
             let $self = Profile.config;
             let $row_id = e.currentTarget.getAttribute('data-row-id');
-
+           
             
             let $formdata = $self.form_register.serializeArray();
 
@@ -138,7 +161,7 @@ $(document).ready(function(){
                     alert('error')
                     return;
                 }
-
+                
                 $self.tbl_display.find('tr#'+data.profile_id).remove();
             })
             .catch(err => {
@@ -153,47 +176,52 @@ $(document).ready(function(){
 
                 switch($route){
                     case 1:  
-                        
                         let $params = new URLSearchParams();
+
                         $params.append('name', $self.in_search.val());                          
-                        let $url_param = '/transact/?' + $params;    				
+                        let $url_param = '/transact/?' + $params;    
+
                         $payload = {url : $url_param,method_type : 'GET'}
+
                         const $common = new Common($payload)
                         $common.ApiData()
                         .then(data => {
                             Profile.Search(2,data);
+                            
                         })
+
                         .catch(err => {
                             console.log('err',err)
                         })
                     break;
                     case 2: 
                             if(data.code != 200){
-                                alert('error')
+                                alert('error2')
                                 return;
                             }
                             let $records = data.data, $txt = '';
+
                             $self.tbl_display.empty(); 
                             $records.forEach($row => {
                                 $txt += `
-                                    <tr id="${ $row.profile_id }">
+                                    <tr id="${ $row.profile_id}">
                                         <td>${ $row.profile_id }</td>
                                         <td>${ $row.firstname } ${ $row.lastname }</td>
                                         <td>${ $row.address}</td>
                                         <td>${ $row.age}</td>
                                         <td>${ $row.birthday}</td>
                                         <td>
-                                            <button class="btn-edit"
+                                            <button class="btn-edit btn btn-success"
                                                 data-row-id="${ $row.profile_id }"
                                                 data-firstname="${ $row.firstname }"
                                                 data-lastname="${ $row.lastname }"
                                                 data-address="${ $row.address }"
                                                 data-age="${ $row.age }"
-                                                data-birthday"${ $row.birthday }"
-                                            >Edit</button>
-                                            <button class="btn-delete"
+                                                data-birthday="${ $row.birthday }"
+                                            >Edit <i class="fa fa-pencil"></i></button>
+                                            <button class="btn-delete btn btn-danger"
                                                 data-row-id="${ $row.profile_id }"
-                                            >Delete</button>
+                                            >Delete <i class="fa fa-close"></i></button>
                                             
                                         </td>
                                     </tr>

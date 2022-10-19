@@ -72,7 +72,7 @@ class Profile():
         result_data = {}
 
         try:
-            queryset_profile = MProfile.objects.filter(reference_tablestatus_fk=1).filter(profile_name__icontains=param).order_by('profile_id') 
+            queryset_profile = MProfile.objects.filter(reference_tablestatus_fk=1).filter(firstname__icontains=param).order_by('profile_id') 
 
             if len(queryset_profile):
                 data= list(queryset_profile.values('profile_id'
